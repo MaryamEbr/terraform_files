@@ -128,6 +128,9 @@ resource "null_resource" "latency_bandwidth" {
 
     inline = [
       "chmod +x ins_folder/codes/routing_tc_script.py",
+      "chmod +x ins_folder/codes/agent_source.py",
+      "chmod +x ins_folder/codes/agent_inference.py",
+      "chmod +x ins_folder/codes/agent_destination.py",
       # "ins_folder/codes/./routing_tc_script.py",
     ]
 
