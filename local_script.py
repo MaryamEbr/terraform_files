@@ -2,6 +2,7 @@
 
 import paramiko
 import sys
+import time
 # sys.path.append('ins_folder/codes')
 # import helper_functions
 
@@ -10,22 +11,22 @@ key = paramiko.RSAKey.from_private_key_file("ee_key.pem")
 
 ssh1 = paramiko.SSHClient()
 ssh1.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh1.connect(hostname="35.89.192.238", username="ubuntu", pkey=key)
+ssh1.connect(hostname="54.186.205.126", username="ubuntu", pkey=key)
 sftp1 = ssh1.open_sftp()
 
 ssh2 = paramiko.SSHClient()
 ssh2.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh2.connect(hostname="34.220.223.27", username="ubuntu", pkey=key)
+ssh2.connect(hostname="34.212.53.85", username="ubuntu", pkey=key)
 sftp2 = ssh2.open_sftp()
 
 ssh3 = paramiko.SSHClient()
 ssh3.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh3.connect(hostname="34.210.75.184", username="ubuntu", pkey=key)
+ssh3.connect(hostname="35.89.166.245", username="ubuntu", pkey=key)
 sftp3 = ssh3.open_sftp()
 
 ssh4 = paramiko.SSHClient()
 ssh4.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh4.connect(hostname="34.221.100.226", username="ubuntu", pkey=key)
+ssh4.connect(hostname="34.219.202.222", username="ubuntu", pkey=key)
 sftp4 = ssh4.open_sftp()
 
 
@@ -59,3 +60,9 @@ ssh1.exec_command(cmd_inference)
 ssh2.exec_command(cmd_inference)
 ssh3.exec_command(cmd_inference)
 ssh4.exec_command(cmd_inference)
+
+
+
+
+time.sleep(60)
+sftp4.get("ins_folder/results/nohup_destination.txt", "results_after/nohup_destination_4.txt")

@@ -44,10 +44,7 @@ resource "aws_instance" "early_exit" {
       "mkdir ins_folder/files",
       "printf ${each.value.instance_name} >> ins_folder/files/current_tier.txt",
       "printf ^^^ >> ins_folder/files/current_tier.txt",
-      "printf ${self.public_ip} >> ins_folder/files/current_tier.txt",
-      "printf ^^^ >> ins_folder/files/current_tier.txt",
       "printf ${self.private_ip} >> ins_folder/files/current_tier.txt",
-
     ]
     
     connection {
@@ -75,7 +72,6 @@ resource "local_file" "local_file_store" {
   for_each = {for server in local.instances: server.instance_name =>  server}
   content = <<-EOL
     ${each.key}
-    ${aws_instance.early_exit[each.key].public_ip}
     ${aws_instance.early_exit[each.key].private_ip}
     EOL
   filename = "ins_folder/files/terraform_info_${each.key}.txt"
@@ -120,7 +116,7 @@ resource "time_sleep" "wait_30_seconds2" {
 
 
 #### Running the scripts and agents
-resource "null_resource" "latency_bandwidth" {
+resource "null_resource" "some_commands" {
   depends_on = [time_sleep.wait_30_seconds2]
   for_each = {for server in local.instances: server.instance_name =>  server}
 
@@ -131,6 +127,8 @@ resource "null_resource" "latency_bandwidth" {
       "chmod +x ins_folder/codes/agent_source.py",
       "chmod +x ins_folder/codes/agent_inference.py",
       "chmod +x ins_folder/codes/agent_destination.py",
+      "sudo sed -i '1i server 169.254.169.123 prefer iburst minpoll 4 maxpoll 4' /etc/chrony/chrony.conf",
+      "sudo /etc/init.d/chrony restart"
       # "ins_folder/codes/./routing_tc_script.py",
     ]
 
